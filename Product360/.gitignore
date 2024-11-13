@@ -1,0 +1,38 @@
+# Maven target directory
+/target/
+
+# Maven build files
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+
+# Log files
+*.log
+
+# Eclipse IDE files
+.project
+.classpath
+.settings/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Hibernate-specific files
+hibernate.cfg.xml (if it contains sensitive data, like database credentials)
+
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*.swo
+
+# Logs and databases
+*.log
+*.sql
+*.sqlite
+
+# Dependency directories
+/Maven Dependencies/
