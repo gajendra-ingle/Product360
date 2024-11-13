@@ -5,7 +5,9 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.query.Query;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 
 import com.jbk.config.SessionFactoryUtility;
 import com.jbk.entity.Product;
@@ -96,50 +98,211 @@ public class Operations {
 	}
 
 	// Retrieve All Products from Database
-	public void retrievesAllProducts() {
+	public List<Product> retrievesAllProducts() {
 
+		List<Product> productList = null;
 		try {
 			Session session = sessionFactory.openSession();
 
-			List<Product> productList = session.createCriteria(Product.class).list();
+			productList = session.createCriteria(Product.class).list();
 
-			for (Product product : productList) {
-				System.out.println(product);
+			return productList;
+
+		} catch (Exception e) {
+			e.getMessage();
+		}
+		return productList;
+	}
+
+	// Retrieve All Products in Ascending Order by Given Parameter");
+	public List<Product> getProductsInAscendingOrder() {
+		List<Product> productList = null;
+		try {
+			Session session = sessionFactory.openSession();
+
+			Criteria criteria = session.createCriteria(Product.class);
+			criteria.addOrder(Order.asc("productName"));
+
+			productList = criteria.list();
+
+			return productList;
+
+		} catch (Exception e) {
+			e.getMessage();
+		}
+		return productList;
+	}
+
+	// Retrieve Product by Product Name");
+	public List<Product> getProductByName(String productName) {
+
+		List<Product> productList = null;
+		try {
+			Session session = sessionFactory.openSession();
+
+			Criteria criteria = session.createCriteria(Product.class);
+
+			criteria.add(Restrictions.eq("productName", productName));
+
+			productList = criteria.list();
+
+			return productList;
+
+		} catch (Exception e) {
+			e.getMessage();
+		}
+		return productList;
+
+	}
+
+	// Retrieve Products with Price Greater Than Specified Price");
+	public List<Product> getProductsByMinPrice(double productPrice) {
+		List<Product> productList = null;
+		try {
+			Session session = sessionFactory.openSession();
+
+			Criteria criteria = session.createCriteria(Product.class);
+
+			criteria.add(Restrictions.gt("productPrice", productPrice));
+
+			productList = criteria.list();
+
+			return productList;
+
+		} catch (Exception e) {
+			e.getMessage();
+		}
+		return productList;
+	}
+
+	// Retrieve Products by Name Pattern
+	public List<Product> getProductsByNamePattern(char ch) {
+		List<Product> productList = null;
+		try {
+			Session session = sessionFactory.openSession();
+
+			Criteria criteria = session.createCriteria(Product.class);
+
+			criteria.add(Restrictions.like("productName", ch + "%"));
+
+			productList = criteria.list();
+
+			return productList;
+
+		} catch (Exception e) {
+			e.getMessage();
+		}
+		return productList;
+	}
+
+	// Retrieve Products Within Price Range
+	public List<Product> getProductsInPriceRange(double start, double end) {
+		List<Product> productList = null;
+		try {
+			Session session = sessionFactory.openSession();
+
+			Criteria criteria = session.createCriteria(Product.class);
+
+			criteria.add(Restrictions.between("productPrice", start, end));
+
+			productList = criteria.list();
+
+			return productList;
+
+		} catch (Exception e) {
+			e.getMessage();
+		}
+		return productList;
+	}
+
+	// Retrieve limited product
+	public List<Product> getLmitedProducts(int limit) {
+		List<Product> productList = null;
+		try {
+			Session session = sessionFactory.openSession();
+
+			Criteria criteria = session.createCriteria(Product.class);
+
+			criteria.addOrder(Order.asc("productName"));
+			criteria.setMaxResults(limit);
+
+			productList = criteria.list();
+
+			return productList;
+
+		} catch (Exception e) {
+			e.getMessage();
+		}
+		return productList;
+	}
+
+	// Retrieve product count
+	public long getProductCount() {
+
+		long count = 0;
+		try {
+			Session session = sessionFactory.openSession();
+
+			Criteria criteria = session.createCriteria(Product.class);
+
+			criteria.setProjection(Projections.rowCount());
+
+			List<Long> list = criteria.list();
+
+			if (!list.isEmpty()) {
+				count = list.get(0);
 			}
 
 		} catch (Exception e) {
 			e.getMessage();
 		}
+		return count;
 	}
 
-	// Retrieve All Products in Ascending Order by Given Parameter");
-	public void getProductsInAscendingOrder(double price, String name) {
+	// Retrieve minimum product price
+	public double getMinPriceProduct() {
 
-	}
+		double count = 0;
+		try {
+			Session session = sessionFactory.openSession();
 
-	// Retrieve Product by Product Name");
-	public void getProductByName(String productName) {
+			Criteria criteria = session.createCriteria(Product.class);
 
-	}
+			criteria.setProjection(Projections.min("productPrice"));
 
-	// Retrieve Products with Price Greater Than Specified Price");
-	public void getProductsByMinPrice() {
+			List<Double> list = criteria.list();
 
-	}
+			if (!list.isEmpty()) {
+				count = list.get(0);
+			}
 
-	// Retrieve Products by Name Pattern
-	public void getProductsByNamePattern() {
-
-	}
-
-	// Retrieve Products Within Price Range
-	public void getProductsInPriceRange() {
-
+		} catch (Exception e) {
+			e.getMessage();
+		}
+		return count;
 	}
 
 	// Retrieve maximum product price
-	public void getMaxProductPrice() {
+	public double getMaxPriceProduct() {
 
+		double count = 0;
+		try {
+			Session session = sessionFactory.openSession();
+
+			Criteria criteria = session.createCriteria(Product.class);
+
+			criteria.setProjection(Projections.max("productPrice"));
+
+			List<Double> list = criteria.list();
+
+			if (!list.isEmpty()) {
+				count = list.get(0);
+			}
+
+		} catch (Exception e) {
+			e.getMessage();
+		}
+		return count;
 	}
 
 }
